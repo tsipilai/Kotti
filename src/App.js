@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './App.css';
 
 const Timestamp = require('react-timestamp');
 
-const homeUrl = 'http://data.foli.fi/siri/sm/495/pretty';
-const workUrl = 'http://data.foli.fi/siri/sm/1031/pretty';
+const homeUrl = 'http://data.foli.fi/siri/sm/495';
+const workUrl = 'http://data.foli.fi/siri/sm/1031';
 let data = "";
 
 class App extends Component {
@@ -15,12 +14,10 @@ class App extends Component {
     workStopData: "",
   };
 
-  async componentDidMount() {
+  function getData() {
     data = fetch(homeUrl);
     data.then(response => response.json()) 
-    .then(json => {   
-      console.log(Array.isArray(json.result))    
-      console.log(json.result.map((result) => result))            
+    .then(json => {            
          this.setState({
           homeStopData: json.result
          }
@@ -29,8 +26,6 @@ class App extends Component {
     data = fetch(workUrl);
     data.then(response => response.json()) 
     .then(json => {   
-      console.log(Array.isArray(json.result))    
-      console.log(json.result.map((result) => result))            
          this.setState({
           workStopData: json.result
          }
@@ -39,29 +34,32 @@ class App extends Component {
     .catch(error => {                  
     });
   }
+
+  async componentDidMount() {
+    getData();
+  }
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
+
+        </header>
         Kotoa Töihi
         {this.state.homeStopData && 
-          this.state.homeStopData.map((result, i) =>
-            <div key={i}>
-              <span>{result.lineref} </span> 
-              <Timestamp time={result.expectedarrivaltime} />
-              <span>Auto: {result.vehicleref}</span>
+          this.state.homeStopData.filter((home) => home.lineref == 60 ).map((home) =>
+            <div key={home.datedvehiclejourneyref}>
+              <span className="title">Lähtee: </span>
+              <span>{home.lineref} </span> 
+              <Timestamp time={home.expectedarrivaltime} />
+              {this.state.workStopData && 
+                this.state.workStopData.filter((work) => work.datedvehiclejourneyref === home.datedvehiclejourneyref).map((work) =>
+                <div key={work.datedvehiclejourneyref}>
+                  <span>Perillä: <Timestamp time={work.destinationaimedarrivaltime} format="time"/></span>
+                </div> 
+                )}
             </div>
           )} 
-         Saapuu töihi
-         {this.state.workStopData && 
-          this.state.workStopData.map((result, i) =>  
-            <div key={i}>
-              <span>{result.lineref} </span> 
-              <Timestamp time={result.expectedarrivaltime} />
-              <span>Auto: {result.vehicleref}</span>
-            </div>
-          )}  
-        </header>
       </div>
     );
   }
