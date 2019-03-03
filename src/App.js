@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Schedule from './components/schedule/schedule';
+
 import './App.scss';
 
 const Timestamp = require('react-timestamp');
@@ -19,7 +21,6 @@ class App extends Component {
   };
 
    getData = () => {
-    console.log('moi')
     data = fetch(homeUrl);
     data.then(response => response.json()) 
     .then(json => {            
@@ -75,6 +76,7 @@ class App extends Component {
 
         </header>
         <h1>Kotoa Töihi</h1>
+        <Schedule /> 
         {this.state.fromHomeData && 
           this.state.fromHomeData.filter((home) => home.lineref == 60 ).map((home) =>
             <div className="buswrap" key={home.datedvehiclejourneyref}>
