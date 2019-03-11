@@ -5,10 +5,10 @@ import './App.scss';
 
 const Timestamp = require('react-timestamp');
 
-const homeUrl = '//data.foli.fi/siri/sm/495';
-const workUrl = '//data.foli.fi/siri/sm/1031';
-const toHomeUrl = '//data.foli.fi/siri/sm/475';
-const fromWorkUrl = '//data.foli.fi/siri/sm/1047';
+const homeUrl = 'http://data.foli.fi/siri/sm/495';
+const workUrl = 'http://data.foli.fi/siri/sm/1031';
+const toHomeUrl = 'http://data.foli.fi/siri/sm/475';
+const fromWorkUrl = 'http://data.foli.fi/siri/sm/1047';
 let data = "";
 
 class App extends Component {
@@ -61,24 +61,6 @@ class App extends Component {
     });
   }
 
-  getArrivalTime = (time) => {
-    let date = new Date(time * 1000)
-    console.log(date.getMinutes())
-  }
-
-  timeConverter(UNIX_timestamp){
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-    return time;
-  }
-
   componentWillMount() {
     this.getData();
     this.refresh = setInterval(() => this.getData(), 10000);
@@ -87,8 +69,7 @@ class App extends Component {
   async componentDidMount() {
   }
   render() {
-  let { fromHomeData } = this.state;
-  console.log(fromHomeData)
+
     return (
       <div className="App">
         <header className="App-header">
@@ -96,8 +77,8 @@ class App extends Component {
         </header>
         <h1>Kotoa Töihi</h1>
         <Schedule /> 
-        {fromHomeData ? 
-          fromHomeData.filter((home) => home.lineref == 60 ).map((home) =>
+        {this.state.fromHomeData && 
+          this.state.fromHomeData.filter((home) => home.lineref == 60 ).map((home) =>
             <div className="buswrap" key={home.datedvehiclejourneyref}>
             <div className="busfrom">
               <span className="title">Lähtee: </span>
@@ -112,7 +93,7 @@ class App extends Component {
                 </div> 
                 )}
             </div>
-          ) : <div>loading</div> } 
+          )} 
         <h1>Töist Kotti</h1>
         {this.state.fromWorkData && 
           this.state.fromWorkData.filter((home) => home.lineref == 60 ).map((home) =>
@@ -121,7 +102,6 @@ class App extends Component {
               <span className="title">Lähtee: </span>
               <span>{home.lineref} </span> 
               <Timestamp time={home.expectedarrivaltime} />
-              {console.log(this.getArrivalTime(home.expectedarrivaltime))}
             </div>
 
               {this.state.toHomeData && 
