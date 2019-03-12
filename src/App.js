@@ -3,13 +3,19 @@ import Schedule from './components/schedule/schedule';
 
 import './App.scss';
 
+const axios = require('axios');
 const Timestamp = require('react-timestamp');
 
-const homeUrl = 'http://data.foli.fi/siri/sm/495';
-const workUrl = 'http://data.foli.fi/siri/sm/1031';
-const toHomeUrl = 'http://data.foli.fi/siri/sm/475';
-const fromWorkUrl = 'http://data.foli.fi/siri/sm/1047';
-let data = "";
+
+
+const tommi = { 
+  stops: {
+    homeUrl: 'http://data.foli.fi/siri/sm/495',
+    workUrl: 'http://data.foli.fi/siri/sm/1031',
+    toHomeUrl: 'http://data.foli.fi/siri/sm/475',
+    fromWorkUrl: 'http://data.foli.fi/siri/sm/1047'
+  } 
+};
 
 class App extends Component {
 
@@ -21,42 +27,23 @@ class App extends Component {
   };
 
    getData = () => {
-    data = fetch(homeUrl);
-    data.then(response => response.json()) 
-    .then(json => {            
+    const { stops } = tommi; 
+    axios.all([
+      axios.get(stops.homeurl),
+      axios.get(stops.workUrl),
+      axios.get(stops.toHomeUrl),
+      axios.get(stops.fromWorkUrl)
+    ])
+    .then(axios.spread((homeurl, workUrl, toHomeUrl, fromWorkUrl) => {         
+      console.log(homeurl) 
          this.setState({
-          fromHomeData: json.result
+          fromHomeData: homeurl.data.result,
+          toWorkData: workUrl.data.result,
+          fromWorkData: toHomeUrl.data.result,
+          toHomeData: fromWorkUrl.data.result
          }
        );
-    })
-    data = fetch(workUrl);
-    data.then(response => response.json()) 
-    .then(json => {   
-         this.setState({
-          toWorkData: json.result
-         }
-       );
-    })
-    .catch(error => {                  
-    });
-    data = fetch(fromWorkUrl);
-    data.then(response => response.json()) 
-    .then(json => {   
-         this.setState({
-          fromWorkData: json.result
-         }
-       );
-    })
-    .catch(error => {                  
-    });
-    data = fetch(toHomeUrl);
-    data.then(response => response.json()) 
-    .then(json => {   
-         this.setState({
-          toHomeData: json.result
-         }
-       );
-    })
+    }))
     .catch(error => {                  
     });
   }
@@ -77,6 +64,7 @@ class App extends Component {
         </header>
         <h1>Kotoa Töihi</h1>
         <Schedule /> 
+        {console.log(this.state.fromHomeData)}
         {this.state.fromHomeData && 
           this.state.fromHomeData.filter((home) => home.lineref == 60 ).map((home) =>
             <div className="buswrap" key={home.datedvehiclejourneyref}>
