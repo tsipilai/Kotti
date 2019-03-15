@@ -31,17 +31,34 @@ class App extends Component {
           toWorkData: workUrl.data.result,
           fromWorkData: toHomeUrl.data.result,
           toHomeData: fromWorkUrl.data.result
-         }
-       );
+         });
     }))
     .catch((error) => { 
-      console.log(error)
-    });
+      console.log(error);
+    })
+  }
+
+  getDataMulti(data) {
+
+    let { stops } = data;
+    let stopName = "";
+
+    stops.map((stop) => {
+      stopName = Object.keys(stop)[0];
+        axios.all([
+          stop[stopName].map((url) => {
+            axios.get(url)
+          })
+        ])
+        .then((stopData) => {
+          console.log(stopData)
+        })
+    })
   }
 
   componentDidMount() {
 
-    let tommi = { 
+    let personA = { 
       stops: {
         homeUrl: '//data.foli.fi/siri/sm/495',
         workUrl: '//data.foli.fi/siri/sm/1031',
@@ -49,10 +66,30 @@ class App extends Component {
         fromWorkUrl: '//data.foli.fi/siri/sm/1047'
       } 
     };
+    let routes = {
+      toWork: {
+        start: ['//data.foli.fi/siri/sm/495','//data.foli.fi/siri/sm/825'],
+        stop: ['//data.foli.fi/siri/sm/41', '//data.foli.fi/siri/sm/81']
+      },
+      toHome: {
+        start: ['//data.foli.fi/siri/sm/211', '//data.foli.fi/siri/sm/19'],
+        stop: ['//data.foli.fi/siri/sm/810', '//data.foli.fi/siri/sm/475']
+      }
+    }
+    let personB = { 
+      stops: [
+        {homeUrl: ['//data.foli.fi/siri/sm/495','//data.foli.fi/siri/sm/825']},
+        {workUrl: ['//data.foli.fi/siri/sm/41', '//data.foli.fi/siri/sm/81']},
+        {toHomeUrl: ['//data.foli.fi/siri/sm/211', '//data.foli.fi/siri/sm/19']},
+        {fromWorkUrl: ['//data.foli.fi/siri/sm/810', '//data.foli.fi/siri/sm/475']}
+      ], 
+    };
+
+    console.log(personB.stops);
     
 
-    this.getData(tommi);
-    this.refresh = setInterval(() => this.getData(tommi), 10000);
+    this.getDataMulti(personB);
+    this.refresh = setInterval(() => this.getDataMulti(personB), 10000);
   }
 
   render() {
