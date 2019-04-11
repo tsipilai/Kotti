@@ -55,6 +55,7 @@ class App extends Component {
     data.then(response => response.json()) 
     .then(json => {   
          this.setState({
+<<<<<<< HEAD
           toHomeData: json.result
          }
        );
@@ -79,11 +80,23 @@ class App extends Component {
           console.log(stopData)
         })
     })
+=======
+          fromHomeData: homeurl.data.result,
+          toWorkData: workUrl.data.result,
+          fromWorkData: toHomeUrl.data.result,
+          toHomeData: fromWorkUrl.data.result
+         }
+       );
+    }))
+    .catch((error) => { 
+      console.log(error)
+    });
+>>>>>>> parent of 9acc4a5... Work with multiple stops
   }
 
   componentDidMount() {
 
-    let personA = { 
+    let tommi = { 
       stops: {
         homeUrl: '//data.foli.fi/siri/sm/495',
         workUrl: '//data.foli.fi/siri/sm/1031',
@@ -91,30 +104,10 @@ class App extends Component {
         fromWorkUrl: '//data.foli.fi/siri/sm/1047'
       } 
     };
-    let routes = {
-      toWork: {
-        start: ['//data.foli.fi/siri/sm/495','//data.foli.fi/siri/sm/825'],
-        stop: ['//data.foli.fi/siri/sm/41', '//data.foli.fi/siri/sm/81']
-      },
-      toHome: {
-        start: ['//data.foli.fi/siri/sm/211', '//data.foli.fi/siri/sm/19'],
-        stop: ['//data.foli.fi/siri/sm/810', '//data.foli.fi/siri/sm/475']
-      }
-    }
-    let personB = { 
-      stops: [
-        {homeUrl: ['//data.foli.fi/siri/sm/495','//data.foli.fi/siri/sm/825']},
-        {workUrl: ['//data.foli.fi/siri/sm/41', '//data.foli.fi/siri/sm/81']},
-        {toHomeUrl: ['//data.foli.fi/siri/sm/211', '//data.foli.fi/siri/sm/19']},
-        {fromWorkUrl: ['//data.foli.fi/siri/sm/810', '//data.foli.fi/siri/sm/475']}
-      ], 
-    };
-
-    console.log(personB.stops);
     
 
-    this.getDataMulti(personB);
-    this.refresh = setInterval(() => this.getDataMulti(personB), 10000);
+    this.getData(tommi);
+    this.refresh = setInterval(() => this.getData(tommi), 10000);
   }
 
   render() {
