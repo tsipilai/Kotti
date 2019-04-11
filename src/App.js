@@ -75,7 +75,7 @@ class App extends Component {
         start: ['//data.foli.fi/siri/sm/211', '//data.foli.fi/siri/sm/19'],
         stop: ['//data.foli.fi/siri/sm/810', '//data.foli.fi/siri/sm/475']
       }
-    }
+    };
     let personB = { 
       stops: [
         {homeUrl: ['//data.foli.fi/siri/sm/495','//data.foli.fi/siri/sm/825']},
