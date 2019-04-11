@@ -27,6 +27,7 @@ class App extends Component {
     data.then(response => response.json()) 
     .then(json => {            
          this.setState({
+<<<<<<< HEAD
           fromHomeData: json.result
          }
        );
@@ -81,6 +82,8 @@ class App extends Component {
         })
     })
 =======
+=======
+>>>>>>> parent of 9acc4a5... Work with multiple stops
           fromHomeData: homeurl.data.result,
           toWorkData: workUrl.data.result,
           fromWorkData: toHomeUrl.data.result,
@@ -91,6 +94,9 @@ class App extends Component {
     .catch((error) => { 
       console.log(error)
     });
+<<<<<<< HEAD
+>>>>>>> parent of 9acc4a5... Work with multiple stops
+=======
 >>>>>>> parent of 9acc4a5... Work with multiple stops
   }
 
