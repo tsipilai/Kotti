@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import Schedule from './components/schedule/schedule';
 
+
 import './App.scss';
 
 const Timestamp = require('react-timestamp');
+const axios = require('axios');
 
-<<<<<<< HEAD
-=======
 const homeUrl = 'http://data.foli.fi/siri/sm/495';
 const workUrl = 'http://data.foli.fi/siri/sm/1031';
 const toHomeUrl = 'http://data.foli.fi/siri/sm/475';
 const fromWorkUrl = 'http://data.foli.fi/siri/sm/1047';
 let data = "";
 
->>>>>>> parent of d95ce8e... Fetch to Axios, combined data fetching
 class App extends Component {
 
   state = {
@@ -23,29 +22,6 @@ class App extends Component {
     fromWorkData: "",
   };
 
-<<<<<<< HEAD
-   getData(data) {
-
-    let { stops } = data;
-
-    axios.all([
-      axios.get(stops && stops.homeUrl),
-      axios.get(stops && stops.workUrl),
-      axios.get(stops && stops.toHomeUrl),
-      axios.get(stops && stops.fromWorkUrl)
-    ])
-    .then(axios.spread((homeurl, workUrl, toHomeUrl, fromWorkUrl) => {         
-         this.setState({
-          fromHomeData: homeurl.data.result,
-          toWorkData: workUrl.data.result,
-          fromWorkData: toHomeUrl.data.result,
-          toHomeData: fromWorkUrl.data.result
-         });
-    }))
-    .catch((error) => { 
-      console.log(error);
-    })
-=======
    getData = () => {
     data = fetch(homeUrl);
     data.then(response => response.json()) 
@@ -85,7 +61,6 @@ class App extends Component {
     })
     .catch(error => {                  
     });
->>>>>>> parent of d95ce8e... Fetch to Axios, combined data fetching
   }
 
   getDataMulti(data) {
