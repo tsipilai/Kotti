@@ -3,9 +3,17 @@ import Schedule from './components/schedule/schedule';
 
 import './App.scss';
 
-const axios = require('axios');
 const Timestamp = require('react-timestamp');
 
+<<<<<<< HEAD
+=======
+const homeUrl = 'http://data.foli.fi/siri/sm/495';
+const workUrl = 'http://data.foli.fi/siri/sm/1031';
+const toHomeUrl = 'http://data.foli.fi/siri/sm/475';
+const fromWorkUrl = 'http://data.foli.fi/siri/sm/1047';
+let data = "";
+
+>>>>>>> parent of d95ce8e... Fetch to Axios, combined data fetching
 class App extends Component {
 
   state = {
@@ -15,6 +23,7 @@ class App extends Component {
     fromWorkData: "",
   };
 
+<<<<<<< HEAD
    getData(data) {
 
     let { stops } = data;
@@ -36,6 +45,47 @@ class App extends Component {
     .catch((error) => { 
       console.log(error);
     })
+=======
+   getData = () => {
+    data = fetch(homeUrl);
+    data.then(response => response.json()) 
+    .then(json => {            
+         this.setState({
+          fromHomeData: json.result
+         }
+       );
+    })
+    data = fetch(workUrl);
+    data.then(response => response.json()) 
+    .then(json => {   
+         this.setState({
+          toWorkData: json.result
+         }
+       );
+    })
+    .catch(error => {                  
+    });
+    data = fetch(fromWorkUrl);
+    data.then(response => response.json()) 
+    .then(json => {   
+         this.setState({
+          fromWorkData: json.result
+         }
+       );
+    })
+    .catch(error => {                  
+    });
+    data = fetch(toHomeUrl);
+    data.then(response => response.json()) 
+    .then(json => {   
+         this.setState({
+          toHomeData: json.result
+         }
+       );
+    })
+    .catch(error => {                  
+    });
+>>>>>>> parent of d95ce8e... Fetch to Axios, combined data fetching
   }
 
   getDataMulti(data) {
