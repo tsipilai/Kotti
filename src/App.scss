@@ -10,6 +10,18 @@ h1 {
   color: white;
   text-transform: uppercase;
 }
+.App-header {
+  display: flex;
+  justify-content: center;
+}
+.nav-item {
+  color: white;
+  border: 1px solid white;
+  padding: 10px 20px;
+  text-decoration: none;
+  margin-left: 1rem;
+  margin-top: 2.5rem;
+}
 .buswrap {
   background-color: white;
   margin-bottom: 1rem;
