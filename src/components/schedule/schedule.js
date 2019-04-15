@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 const Timestamp = require('react-timestamp');
 
-let initialState = {
-    userEndPoints: "",
-    fromHomeData: "",
-    toWorkData: "",
-    toHomeData: "",
-    fromWorkData: "",
-    lines: "",
-};
-
 export default class Schedule extends Component {
     compareValues(key, order='asc') {
         return function(a, b) {
@@ -30,15 +21,21 @@ export default class Schedule extends Component {
         };
     }
 
+    initialState = {
+        userEndPoints: "",
+        fromHomeData: "",
+        toWorkData: "",
+        toHomeData: "",
+        fromWorkData: "",
+        lines: "",
+        loaded: false
+    };
+
     constructor(props) {
         super(props);
-        this.state = initialState;
+        this.state = this.initialState;
     }
 
-    reset() {
-        this.setState(initialState);
-    }
-    
     async fechTimeTable(data, lines) {
     let timeTable = [];
     for(const routeUrl of data) {
@@ -66,24 +63,36 @@ export default class Schedule extends Component {
                 toWorkData: work,
                 fromWorkData: fromWork,
                 toHomeData: toHome,
-                lines: stops.lines
+                lines: stops.lines,
+                loaded: true
             });
         }
     }
 
     async componentWillReceiveProps(nextProps, props) {
-
       if(nextProps.busstops.stops.homeUrl !== this.props.busstops.stops.homeUrl) {
         await this.setState({
           userEndPoints: nextProps.busstops,
+          fromHomeData: "",
+          toWorkData: "",
+          toHomeData: "",
+          fromWorkData: "",
+          lines: "",
+          loaded: false,
         });
       } else {
         await this.setState({
           userEndPoints: this.props.busstops,
+          fromHomeData: "",
+          toWorkData: "",
+          toHomeData: "",
+          fromWorkData: "",
+          lines: "",
+          loaded: false,
         });
       }
       console.log(this.state.userEndPoints)
-        this.initial = this.getDataMulti(this.state.userEndPoints);
+      this.initial = this.getDataMulti(this.state.userEndPoints);
     }
 
     async componentDidMount(nextProps, props) {
@@ -99,12 +108,17 @@ export default class Schedule extends Component {
     }
 
     componentWillUnmount() {
-        this.mounted = false;
+      this.setState({
+        loaded: false,
+      });
     }
 
     render() {
         return (
             
+            <div className="schedulewrap">
+            {console.log(this.state.loaded)}
+            {this.state.fromHomeData ?
             <div>
             <h1>Kotoo Töihi</h1>
             {this.state.fromHomeData && 
@@ -139,8 +153,13 @@ export default class Schedule extends Component {
                     </div> 
                     )}
                 </div>
-              )}   
+              )}
+              </div> : 
+              <div id="loader-container">
+                <p id="loadingText">Loading</p>
               </div>
+            }   
+           </div>
         )
     }
 

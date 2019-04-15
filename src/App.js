@@ -5,10 +5,8 @@ import {
   Switch,
   Link
 } from 'react-router-dom';
-import { AnimatedSwitch } from 'react-router-transition';
-
 import Schedule from './components/schedule/schedule';
-
+import Weather from './components/weather/weather';
 import './App.scss';
 
 const personA = { 
@@ -31,34 +29,22 @@ const personB = {
   }, 
 };
 
-function mapStyles(styles) {
-  return {
-    opacity: styles.opacity,
-    transform: `scale(${styles.scale})`,
-  };
-}
-
-// child matches will...
-const switchTransition = {
-  // start in a transparent, upscaled state
-  atEnter: {
-    opacity: 0,
-    scale: 1.2,
-  },
-  // leave in a transparent, downscaled state
-  atLeave: {
-    opacity: 0,
-    scale: 1.2,
-  },
-  // and rest at an opaque, normally-scaled state
-  atActive: {
-    opacity: 1,
-    scale: 1,
-  },
-};
-
 
 class App extends Component {
+
+  state = {
+    weather: "",
+  }
+
+  async componentDidMount() {
+    const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?id=633679&lang=fi&units=metric&appid=12a2811bf39c85349c40638f409756dc`);
+    const response = await api_call.json();
+
+    this.setState({
+      weather: response,
+    })
+
+  }
 
   render() {
 
@@ -67,7 +53,7 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <Link to="/" className="nav-item">
-              Kotti
+              &larr;
             </Link>
             <Link to="/tommi" className="nav-item">
               Tommi
@@ -76,16 +62,15 @@ class App extends Component {
               Leea
             </Link>
           </header>
-          <AnimatedSwitch
-            atEnter={switchTransition.atEnter}
-            atLeave={switchTransition.atLeave}
-            atActive={switchTransition.atActive}
-            mapStyles={mapStyles}
-            className="switch-wrapper"
-          >
+          <Switch>
+            {this.state.weather && 
+              <Route exact path="/"  render={(props) => <Weather {...props} name={'leea'} weather={this.state.weather} />} />
+            }
             <Route path="/tommi" render={(props) => <Schedule {...props} name={'tommi'} busstops={personA} />} />
             <Route path="/leea"  render={(props) => <Schedule {...props} name={'leea'} busstops={personB} />} />
-          </AnimatedSwitch>
+            
+          </Switch>
+
         </div>
       </Router>
     );
