@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 const Weather = (props) => {
 
   function round(value, precision) {
@@ -15,4 +17,9 @@ const Weather = (props) => {
     </div>
   )
 }
+
+Weather.propTypes = {
+  weather: PropTypes.object,
+};
+
 export default Weather;
