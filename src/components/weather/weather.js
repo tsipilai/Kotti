@@ -12,6 +12,7 @@ const Weather = (props) => {
 
   return (
     <div className="weather">
+      <span className="pretitle">Meanwhile in Turku</span>
       <h1 className="temperature">{round(weather.main.temp, 1)}<span className="celsius">°c</span></h1>
       <h3 className="description">{weather.weather[0].description}</h3>
     </div>
