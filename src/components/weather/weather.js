@@ -10,7 +10,7 @@ const Weather = (props) => {
 
   const { weather } = props
 
-  return(
+  return (
     <div className="weather">
       <h1 className="temperature">{round(weather.main.temp, 1)}<span className="celsius">°c</span></h1>
       <h3 className="description">{weather.weather[0].description}</h3>

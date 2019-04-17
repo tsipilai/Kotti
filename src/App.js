@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Schedule from './components/schedule/schedule';
 import Weather from './components/weather/weather';
+import Shibe from './components/shibe/shibe';
 import './App.scss';
 
 const personA = { 
@@ -34,14 +35,26 @@ class App extends Component {
 
   state = {
     weather: "",
+    shibe: "",
   }
 
   async componentDidMount() {
-    const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?id=633679&lang=fi&units=metric&appid=12a2811bf39c85349c40638f409756dc`);
-    const response = await api_call.json();
+
+    const weather_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?id=633679&lang=fi&units=metric&appid=12a2811bf39c85349c40638f409756dc`);
+    const weather_response = await weather_call.json();
+
+    var corsAnywhere = 'https://cors-anywhere.herokuapp.com/';
+		var apiUrl = 'http://shibe.online/api/shibes?count=1';
+
+    const shibe_call = await fetch(corsAnywhere + apiUrl);
+    console.log(shibe_call)
+    const shibe_response = await shibe_call.json();
+
+    console.log(shibe_response)
 
     this.setState({
-      weather: response,
+      weather: weather_response,
+      shibe: shibe_response,
     })
 
   }
@@ -64,7 +77,12 @@ class App extends Component {
           </header>
           <Switch>
             {this.state.weather && 
-              <Route exact path="/"  render={(props) => <Weather {...props} name={'leea'} weather={this.state.weather} />} />
+              <Route exact path="/"  render={(props) =>
+                <Fragment>
+                  <Weather {...props} weather={this.state.weather} />
+                  <Shibe {...props} shibe={this.state.shibe} />
+                </Fragment> 
+              } />
             }
             <Route path="/tommi" render={(props) => <Schedule {...props} name={'tommi'} busstops={personA} />} />
             <Route path="/leea"  render={(props) => <Schedule {...props} name={'leea'} busstops={personB} />} />
