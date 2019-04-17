@@ -76,13 +76,16 @@ class App extends Component {
             </Link>
           </header>
           <Switch>
-            {this.state.weather && 
+            {this.state.weather ? 
               <Route exact path="/"  render={(props) =>
                 <Fragment>
                   <Weather {...props} weather={this.state.weather} />
                   <Shibe {...props} shibe={this.state.shibe} />
                 </Fragment> 
-              } />
+              } /> :
+              <div id="loader-container">
+                <p id="loadingText">Loading</p>
+              </div>
             }
             <Route path="/tommi" render={(props) => <Schedule {...props} name={'tommi'} busstops={personA} />} />
             <Route path="/leea"  render={(props) => <Schedule {...props} name={'leea'} busstops={personB} />} />
